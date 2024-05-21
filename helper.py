@@ -24,13 +24,15 @@ def process(subdir,filename, image, output_directory):
     denoised_image = cv2.fastNlMeansDenoising(noised_image, None, 30, 7, 21)
     cv2.imwrite(os.path.join(output_subdir, filename[:-4]+'_noised-denoised.png'), denoised_image)
 
-
+    #detecting edges
     edges = cv2.Canny(resized_image, 100, 200)
     cv2.imwrite(os.path.join(output_subdir, filename[:-4]+'_edges.png'), edges)
 
+    #Histogram equalizing
     hist_equalized = cv2.equalizeHist(resized_image)
     cv2.imwrite(os.path.join(output_subdir, filename[:-4]+'_hist_equalized.png'), hist_equalized)
 
+    #Thresholding
     _, global_thresh = cv2.threshold(resized_image, 127, 255, cv2.THRESH_BINARY)
     cv2.imwrite(os.path.join(output_subdir, filename[:-4]+'_global_thresholded.png'), global_thresh)
     
