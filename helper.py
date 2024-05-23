@@ -3,6 +3,16 @@ import cv2
 import shutil
 import numpy as np
 
+def rotate_image(image, angle):
+    # Get the image dimensions
+    (h, w) = image.shape[:2]
+    # Calculate the center of the image
+    center = (w / 2, h / 2)
+    # Perform the rotation
+    M = cv2.getRotationMatrix2D(center, angle, 1.0)
+    rotated = cv2.warpAffine(image, M, (w, h))
+    return rotated
+
 def process(subdir,filename, image, output_directory):
     # Making directory 
     if not os.path.exists(os.path.join(output_directory, subdir)):
@@ -39,6 +49,12 @@ def process(subdir,filename, image, output_directory):
     adaptive_thresh = cv2.adaptiveThreshold(resized_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
     cv2.imwrite(os.path.join(output_subdir, filename[:-4]+'_adaptive_thresholded.png'), adaptive_thresh)
 
+    rotated_90 = rotate_image(resized_image, 90)
+    cv2.imwrite(os.path.join(output_subdir, filename[:-4]+'_rotated_90.png'), rotated_90)
+    rotated_180 = rotate_image(resized_image, 180)
+    cv2.imwrite(os.path.join(output_subdir, filename[:-4]+'_rotated_180.png'), rotated_180)
+    rotated_270 = rotate_image(resized_image, 270)
+    cv2.imwrite(os.path.join(output_subdir, filename[:-4]+'_rotated_270.png'), rotated_270)
 
 
 def clear_directory(directory_path):
