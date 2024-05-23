@@ -4,11 +4,8 @@ import shutil
 import numpy as np
 
 def rotate_image(image, angle):
-    # Get the image dimensions
     (h, w) = image.shape[:2]
-    # Calculate the center of the image
     center = (w / 2, h / 2)
-    # Perform the rotation
     M = cv2.getRotationMatrix2D(center, angle, 1.0)
     rotated = cv2.warpAffine(image, M, (w, h))
     return rotated
@@ -49,6 +46,7 @@ def process(subdir,filename, image, output_directory):
     adaptive_thresh = cv2.adaptiveThreshold(resized_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
     cv2.imwrite(os.path.join(output_subdir, filename[:-4]+'_adaptive_thresholded.png'), adaptive_thresh)
 
+    #rotating
     rotated_90 = rotate_image(resized_image, 90)
     cv2.imwrite(os.path.join(output_subdir, filename[:-4]+'_rotated_90.png'), rotated_90)
     rotated_180 = rotate_image(resized_image, 180)
